@@ -10,4 +10,27 @@ workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - welcome/run
+      build:
+       docker: 
+        -image: circleci/node:8-browser
+
+      working_directory: ~/repo
+
+      steps: 
+       -checkout
+
+       -restore_cache:
+          keys:
+           - v1-dependencies-{{ checksum "package-json"}}
+           - v1-dependencies-
+
+        -run: yarn install
+
+
+        -save_cache:
+          paths: 
+           - node_modules
+          keys: v1-dependencies-{{ checksum "package-json"}}
+
+        -run: yarn ng build --prod
+        -run: yarn ng test --single-run
