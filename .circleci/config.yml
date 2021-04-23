@@ -12,7 +12,7 @@ jobs:
       - run: yarn test --single-run
   test:
     docker:
-      - image: circleci/node:8-browser         
+      - image: circleci/node         
     steps:
       - checkout
       - run: echo "this is the test job"
