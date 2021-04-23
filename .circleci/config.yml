@@ -1,28 +1,19 @@
- welcome:
-    # Run the welcome/run job in its own container
-    jobs:
-      - welcome/run
-      build:
-       docker: 
-        -image: circleci/node:8-browser
+version: 2.1
 
-      working_directory: ~/repo
+# Define the jobs we want to run for this project
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8-browser     
+         
+    steps:
+      - checkout      
+      - run: yarn ng build --prod
+      - run: yarn test --single-run
+  test:
+    docker:
+      - image: circleci/node:8-browser         
+    steps:
+      - checkout
+      - run: echo "this is the test job"
 
-      steps: 
-       -checkout
-
-      # -restore_cache:
-       #   keys:
-        #   - v1-dependencies-{{ checksum "package-json"}}
-         #  - v1-dependencies-
-
-        -run: yarn install
-
-
-        #-save_cache:
-         # paths: 
-          # - node_modules
-         # keys: v1-dependencies-{{ checksum "package-json"}}
-
-        -run: yarn ng build --prod
-        -run: yarn ng test --single-run 
